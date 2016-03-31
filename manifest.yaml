@@ -1,0 +1,74 @@
+#You can edit this file at editor.swagger.io.
+swagger: '2.0'
+info:
+  x-21-github-profile-url:
+  x-21-github-project-url:
+  title: OCR to Speech
+  description: Performs OCR on an image to extract text, translate, and produce an audio clip.
+  termsOfService: https://opensource.org/licenses/MIT
+  x-21-usage: ''
+  x-21-quick-buy: "$ 21 buy http://<ZEROTIER IP>:6005/ocr2speech21?image_url=http://i.imgur.com/8nVmA6t.jpg --maxprice 20000 | jq -r '.data' | base64 --decode > output.wav\n# Note: run `sudo apt-get install jq` or `brew install jq` for Mac if jq is not already installed."
+  x-21-category: Utilities
+  x-21-app-image: ''
+  x-21-total-price:
+    min: 15000
+    max: 15000
+  contact: {name: Satoshi Nakamoto, email: satoshi@example.com}
+  license:
+    name: MIT LICENSE
+    url: https://opensource.org/licenses/MIT
+  x-21-keywords:
+    - translation
+    - audio
+    - text
+    - image
+    - ocr
+  version: '0.1'
+host: <ZEROTIER IP>:6005
+schemes:
+  - http
+basePath: /
+x-21-manifest-path: /manifest
+x-21-healthcheck-path: /healthy
+paths:
+  /ocr2speech21:
+    get:
+      summary: Get an audio file reading text found in an image
+      produces:
+        - application/json
+      parameters:
+        - name: image
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              image_url:
+                type: string
+      responses:
+        200:
+          description: Audio file (base64 encoded)
+          schema:
+            type: object
+            properties:
+              data:
+                type: string
+        400:
+          description: Invalid input.
+          schema:
+            $ref: '#/definitions/InvalidInput'
+        500:
+          description: Error processing request.
+          schema:
+            $ref: '#/definitions/ProcessingError'
+definitions:
+  InvalidInput:
+    type: object
+    properties:
+       error:
+        type: string
+  ProcessingError:
+    type: object
+    properties:
+      error:
+        type: string
